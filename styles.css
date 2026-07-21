@@ -145,12 +145,7 @@
   .speaker-avatar{
     width:48px;height:48px;
     border-radius:50%;
-    background:linear-gradient(135deg, var(--cyan), var(--blue));
-    display:flex;align-items:center;justify-content:center;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    color:var(--navy-deep);
-    font-size:1.1rem;
+    object-fit: cover;
     flex:0 0 auto;
   }
   .speaker-meta .name{ font-weight:600; color:#fff; font-size:0.98rem; }
