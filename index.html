@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Conference — Inscription</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<section class="hero">
+  <div class="streaks">
+    <div class="streak s1"></div>
+    <div class="streak s2"></div>
+    <div class="streak s3"></div>
+  </div>
+
+  <div class="wrap">
+    <div class="eyebrow">Accès libre &amp; gratuit</div>
+    <h1>Business<br><span>Conference</span></h1>
+
+    <div class="theme-box">
+      <b>Thème :</b> Opportunités Invisibles - Découvrir et Lancer sans Investir.
+    </div>
+
+    <div class="facts">
+      <div class="fact">
+        <div class="ic">📅</div>
+        <div class="txt"><b>Date</b><span>À communiquer ultérieurement aux inscrits</span></div>
+      </div>
+      <div class="fact">
+        <div class="ic">⏰</div>
+        <div class="txt"><b>Heure</b><span>À communiquer ultérieurement aux inscrits</span></div>
+      </div>
+      <div class="fact">
+        <div class="ic">📍</div>
+        <div class="txt"><b>Lieu</b><span>En ligne - via Zoom</span></div>
+      </div>
+    </div>
+
+    <div class="speaker-card">
+      <div class="speaker-avatar">CA</div>
+      <div class="speaker-meta">
+        <div class="name">Clovis C. Adjovi</div>
+        <div class="role">Consultant Digital &amp; Founder</div>
+      </div>
+    </div>
+
+    <a href="#inscription" class="cta-btn">Je m'inscris →</a>
+  </div>
+</section>
+
+<section class="form-section" id="inscription">
+  <div class="wrap">
+    <div class="form-card">
+      <div id="formView">
+        <h2>Réservez votre place</h2>
+        <p class="sub">Le lien Zoom vous sera envoyé par email avant la conférence. L'inscription est gratuite.</p>
+
+        <form id="regForm" novalidate>
+          <label class="first" for="name">Nom complet</label>
+          <input id="name" name="name" type="text" placeholder="Ex : Aïcha Koné" autocomplete="name" required>
+          <div class="error" id="nameError">Merci d'indiquer votre nom.</div>
+
+           <label for="age">Age</label>
+          <input id="age" name="age" type="text" placeholder="Ex : 30 ans">
+
+          <label for="email">Adresse email</label>
+          <input id="email" name="email" type="email" placeholder="vous@exemple.com" autocomplete="email" required>
+          <div class="error" id="emailError">Merci d'indiquer un email valide.</div>
+
+          <label for="phone">Téléphone (whatsapp)</label>
+          <input id="phone" name="phone" type="tel" placeholder="+229 01 00 00 00 00" autocomplete="tel">
+
+          <label for="job">Fonction / secteur d'activité</label>
+          <input id="job" name="job" type="text" placeholder="Ex : Entrepreneure, secteur commerce">
+
+          <label for="city">Ville / pays</label>
+          <input id="city" name="city" type="text" placeholder="Ex : Cotonou, Bénin">
+
+          <label for="expectations">Attentes / questions pour le speaker (optionnel)</label>
+          <textarea id="expectations" name="expectations" placeholder="Qu'aimeriez-vous que Clovis aborde ?"></textarea>
+
+          <button type="submit" class="submit-btn" id="submitBtn">S'inscrire à la conférence</button>
+          <p class="note">Vos informations servent uniquement à l'envoi du lien de connexion!</p>
+        </form>
+      </div>
+
+      <div class="success" id="successView">
+        <div class="check">✅</div>
+        <h3>Inscription confirmée</h3>
+        <p>Merci <span id="successName"></span> ! Vous recevrez le lien Zoom par email à l'adresse indiquée, avant le début de la conférence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>Business Conference - organisée par Clovis C. Adjovi</footer>
+
+<script>
+  const form = document.getElementById('regForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formView = document.getElementById('formView');
+  const successView = document.getElementById('successView');
+  const successName = document.getElementById('successName');
+
+  function validEmail(v){
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  }
+
+  // Remplace l'URL ci-dessous par celle de TON formulaire Formspree
+  // (tu la récupères sur formspree.io après avoir créé un formulaire).
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrenkowk";
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const age = document.getElementById('age').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const job = document.getElementById('job').value.trim();
+    const city = document.getElementById('city').value.trim();
+    const expectations = document.getElementById('expectations').value.trim();
+
+    let valid = true;
+    document.getElementById('nameError').style.display = 'none';
+    document.getElementById('emailError').style.display = 'none';
+
+    if(!name){
+      document.getElementById('nameError').style.display = 'block';
+      valid = false;
+    }
+    if(!validEmail(email)){
+      document.getElementById('emailError').style.display = 'block';
+      valid = false;
+    }
+    if(!valid) return;
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Inscription en cours...';
+
+    const entry = { name, age, email, phone, job, city, expectations };
+
+    try{
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(entry)
+      });
+
+      if(!response.ok){
+        throw new Error('Formspree a renvoyé une erreur');
+      }
+
+      successName.textContent = name;
+      formView.style.display = 'none';
+      successView.style.display = 'block';
+    }catch(err){
+      console.error('Erreur d\'envoi:', err);
+      submitBtn.disabled = false;
+      submitBtn.textContent = "S'inscrire à la conférence";
+      document.getElementById('emailError').textContent = "L'envoi a échoué, réessayez dans un instant.";
+      document.getElementById('emailError').style.display = 'block';
+    }
+  });
+</script>
+
+</body>
+</html>
